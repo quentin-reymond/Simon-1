@@ -1,0 +1,73 @@
+## Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider (JetBrains)
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+
+# Mac OS
+.DS_Store
+
+# Logs
+*.log
+
+# Backup files
+*~
+*.bak
+*.tmp
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# Entity Framework
+Migrations/
+
+# .NET Core
+project.lock.json
+project.assets.json
+artifacts/
+
+# MAUI specific
+*.apk
+*.aab
+*.app
+*.xcarchive
+*.ipa
+
+# Test Results
+TestResults/
+*.coverage
+*.coveragexml
+
+# Publish
+publish/
+dist/
+wwwroot/
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Rider local history
+.idea/.idea.*
+
+# dotenv files (secrets, config)
+.env
+.env.*
+
