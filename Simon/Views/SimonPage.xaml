@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Simon.ViewModels"
+             xmlns:converters="clr-namespace:Simon.Converters"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Simon.Views.SimonPage"
+             BackgroundColor="#121212"
+             Title="Simon Game">
+
+    <ContentPage.Resources>
+        <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+        <converters:BoolToScaleConverter x:Key="BoolToScaleConverter" />
+        <converters:GameStateToVisibilityConverter x:Key="GameStateToVisibilityConverter" />
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <viewmodels:SimonViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        <!-- En-tête avec titre et score -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,20,0,30">
+            <VerticalStackLayout Grid.Column="0" HorizontalOptions="Start">
+                <Label Text="SIMON" FontSize="36" FontAttributes="Bold" TextColor="White" 
+                       FontFamily="Monospace" Opacity="{Binding TitleOpacity}" />
+                <Label Text="Test your memory" FontSize="16" TextColor="#AAAAAA" 
+                       Opacity="{Binding TitleOpacity}" />
+            </VerticalStackLayout>
+            
+            <Frame Grid.Column="1" HorizontalOptions="End" CornerRadius="15" 
+                   BackgroundColor="#222222" Padding="15" BorderColor="Transparent"
+                   IsVisible="{Binding IsGameActive}">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="{Binding Score, StringFormat='Score: {0}'}" 
+                           FontSize="18" FontAttributes="Bold" TextColor="White" 
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding Level, StringFormat='Level: {0}'}" 
+                           FontSize="16" TextColor="#AAAAAA" 
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+        
+        <!-- Zone de jeu principale -->
+        <Grid Grid.Row="1" x:Name="GameArea">
+            <!-- Animation de démarrage -->
+            <Frame IsVisible="{Binding IsStartScreenVisible}" 
+                   BackgroundColor="#222222" CornerRadius="20" 
+                   Opacity="{Binding StartScreenOpacity}"
+                   TranslationY="{Binding StartScreenTranslation}"
+                   HorizontalOptions="Center" VerticalOptions="Center"
+                   Padding="30" BorderColor="Transparent">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="SIMON" FontSize="48" FontAttributes="Bold" TextColor="White" 
+                           HorizontalOptions="Center" />
+                    <Label Text="Test your memory skills" FontSize="18" TextColor="#AAAAAA" 
+                           HorizontalOptions="Center" />
+                    <Button Text="START GAME" Command="{Binding StartGameCommand}" 
+                            BackgroundColor="#4CAF50" TextColor="White" 
+                            FontAttributes="Bold" CornerRadius="25" 
+                            HeightRequest="50" WidthRequest="200" 
+                            Margin="0,20,0,0" />
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Boutons du jeu Simon -->
+            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*"
+                  ColumnSpacing="15" RowSpacing="15"
+                  Scale="{Binding GameBoardScale}"
+                  Opacity="{Binding GameBoardOpacity}"
+                  IsVisible="{Binding IsGameActive}">
+                
+                <!-- Bouton Rouge -->
+                <Frame Grid.Row="0" Grid.Column="0"
+                       BackgroundColor="{Binding IsRedActive, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Red'}"
+                       CornerRadius="30" HasShadow="True"
+                       Scale="{Binding IsRedActive, Converter={StaticResource BoolToScaleConverter}}"
+                       Padding="0" BorderColor="Transparent">
+                    <Button Command="{Binding ColorPressedCommand}"
+                            CommandParameter="Red"
+                            BackgroundColor="Transparent"
+                            BorderColor="Transparent"
+                            Text=""
+                            Opacity="0.7" />
+                </Frame>
+                
+                <!-- Bouton Vert -->
+                <Frame Grid.Row="0" Grid.Column="1"
+                       BackgroundColor="{Binding IsGreenActive, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Green'}"
+                       CornerRadius="30" HasShadow="True"
+                       Scale="{Binding IsGreenActive, Converter={StaticResource BoolToScaleConverter}}"
+                       Padding="0" BorderColor="Transparent">
+                    <Button Command="{Binding ColorPressedCommand}"
+                            CommandParameter="Green"
+                            BackgroundColor="Transparent"
+                            BorderColor="Transparent"
+                            Text=""
+                            Opacity="0.7" />
+                </Frame>
+                
+                <!-- Bouton Bleu -->
+                <Frame Grid.Row="1" Grid.Column="0"
+                       BackgroundColor="{Binding IsBlueActive, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Blue'}"
+                       CornerRadius="30" HasShadow="True"
+                       Scale="{Binding IsBlueActive, Converter={StaticResource BoolToScaleConverter}}"
+                       Padding="0" BorderColor="Transparent">
+                    <Button Command="{Binding ColorPressedCommand}"
+                            CommandParameter="Blue"
+                            BackgroundColor="Transparent"
+                            BorderColor="Transparent"
+                            Text=""
+                            Opacity="0.7" />
+                </Frame>
+                
+                <!-- Bouton Jaune -->
+                <Frame Grid.Row="1" Grid.Column="1"
+                       BackgroundColor="{Binding IsYellowActive, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Yellow'}"
+                       CornerRadius="30" HasShadow="True"
+                       Scale="{Binding IsYellowActive, Converter={StaticResource BoolToScaleConverter}}"
+                       Padding="0" BorderColor="Transparent">
+                    <Button Command="{Binding ColorPressedCommand}"
+                            CommandParameter="Yellow"
+                            BackgroundColor="Transparent"
+                            BorderColor="Transparent"
+                            Text=""
+                            Opacity="0.7" />
+                </Frame>
+                
+                <toolkit:MediaElement x:Name="RedSound" Source="red.mp3" ShouldAutoPlay="False" IsVisible="False" />
+                <toolkit:MediaElement x:Name="GreenSound" Source="green.mp3" ShouldAutoPlay="False" IsVisible="False" />
+                <toolkit:MediaElement x:Name="BlueSound" Source="blue.mp3" ShouldAutoPlay="False" IsVisible="False" />
+                <toolkit:MediaElement x:Name="YellowSound" Source="yellow.mp3" ShouldAutoPlay="False" IsVisible="False" />
+            </Grid>
+            
+            <!-- Animation de Game Over -->
+            <Frame IsVisible="{Binding IsGameOver}" 
+                   BackgroundColor="#222222" CornerRadius="20" 
+                   Opacity="{Binding GameOverOpacity}"
+                   Scale="{Binding GameOverScale}"
+                   HorizontalOptions="Center" VerticalOptions="Center"
+                   Padding="30" BorderColor="Transparent">
+                <VerticalStackLayout Spacing="20">
+                    <Label Text="GAME OVER" FontSize="36" FontAttributes="Bold" TextColor="#FF5252" 
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding Score, StringFormat='Your Score: {0}'}" FontSize="24" TextColor="White" 
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding Level, StringFormat='Level Reached: {0}'}" FontSize="18" TextColor="#AAAAAA" 
+                           HorizontalOptions="Center" />
+                    <Button Text="PLAY AGAIN" Command="{Binding RestartGameCommand}" 
+                            BackgroundColor="#4CAF50" TextColor="White" 
+                            FontAttributes="Bold" CornerRadius="25" 
+                            HeightRequest="50" WidthRequest="200" 
+                            Margin="0,20,0,0" />
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+        
+        <!-- Pied de page avec informations -->
+        <VerticalStackLayout Grid.Row="2" Margin="0,30,0,0" Spacing="10">
+            <Label Text="Instructions:" FontSize="16" FontAttributes="Bold" TextColor="White" 
+                   IsVisible="{Binding IsGameActive}" Opacity="{Binding InstructionsOpacity}" />
+            <Label Text="Watch the sequence and repeat it by pressing the buttons in the same order." 
+                   FontSize="14" TextColor="#AAAAAA" LineBreakMode="WordWrap"
+                   IsVisible="{Binding IsGameActive}" Opacity="{Binding InstructionsOpacity}" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
